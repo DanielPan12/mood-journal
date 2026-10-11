@@ -1,9 +1,9 @@
 /** Small, self-contained care activities. No network requests or external audio. */
 export const CARES = Object.freeze([
-  { id: 'breathe', title: '让呼吸慢一点', category: '呼吸', minutes: 1, description: '跟着舒适的节奏，留一分钟给自己。', reason: '想暂停一下时，可以先把注意力放回呼吸。', color: '#dae7d4', icon: '◌' },
-  { id: 'music', title: '听一段轻柔的声音', category: '音乐', minutes: 3, description: '三分钟原创合成器氛围乐，没有歌词。', reason: '不想做太多时，让柔和的声音陪你坐一会儿。', color: '#e4e1ed', icon: '♫' },
-  { id: 'grounding', title: '回到此时此地', category: '感官', minutes: 2, description: '用 5–4–3–2–1，重新发现身边的小细节。', reason: '思绪有些拥挤时，试着看看、听听身边的事物。', color: '#f0e6cf', icon: '✧' },
-  { id: 'stretch', title: '松一松肩颈', category: '舒展', minutes: 3, description: '几组轻柔的小动作，按自己的幅度来。', reason: '久坐或身体紧绷时，给肩膀一点活动的空间。', color: '#e3e8df', icon: '↗' },
+  { id: 'breathe', title: '跟着呼吸', category: '呼吸', minutes: 1, description: '看圆圈的节奏呼吸，也可以选择自己的节奏。', reason: '想暂停一下时，可以先把注意力放回呼吸。', color: '#dae7d4', icon: '◌' },
+  { id: 'music', title: '听会儿音乐', category: '音乐', minutes: 3, description: '三分钟合成器和弦，没有歌词，可以调节音量。', reason: '不想做太多时，让柔和的声音陪你坐一会儿。', color: '#e4e1ed', icon: '♫' },
+  { id: 'grounding', title: '看看周围', category: '感官', minutes: 2, description: '找五样看得到的东西，再留意触感、声音和气味。', reason: '思绪有些拥挤时，试着看看、听听身边的事物。', color: '#f0e6cf', icon: '✧' },
+  { id: 'stretch', title: '松开肩膀', category: '舒展', minutes: 3, description: '耸肩、绕肩、放松双手。坐着也能做。', reason: '久坐或身体紧绷时，给肩膀一点活动的空间。', color: '#e3e8df', icon: '↗' },
 ]);
 
 const FEEDBACK = ['轻松一些', '差不多', '仍需休息'];
@@ -94,7 +94,7 @@ export function openCare(id, { onComplete = () => {} } = {}) {
   dialog.style.setProperty('--care-tint', care.color);
   dialog.innerHTML = `
     <div class="care-inner">
-      <div class="care-top"><p class="care-kicker">留一点时间 · 照顾自己</p><button type="button" class="care-close" aria-label="关闭练习，不保存">×</button></div>
+      <div class="care-top"><p class="care-kicker">休息练习</p><button type="button" class="care-close" aria-label="关闭练习，不保存">×</button></div>
       <h2 id="care-title"></h2><p id="care-description" class="care-muted"></p>
       <section class="care-exercise">
         <div class="care-visual" aria-hidden="true"><div class="care-orb"></div></div>
@@ -110,7 +110,7 @@ export function openCare(id, { onComplete = () => {} } = {}) {
         <h3 tabindex="-1" class="care-result-heading">此刻的你，感觉如何？</h3>
         <p class="care-muted care-duration"></p>
         <div class="care-feedback" role="group" aria-label="选择练习后的感受"></div>
-        <p class="care-help">每一种感受都可以。按真实的感觉选择就好。</p>
+        <p class="care-help">这次有没有舒服一点？照实选就行。</p>
         <div class="care-actions"><button type="button" class="care-primary care-save" disabled>保存这次练习</button><button type="button" class="care-discard">不保存，返回</button></div>
       </section>
       <p class="care-error" role="alert" hidden></p>
@@ -311,7 +311,7 @@ export function openCare(id, { onComplete = () => {} } = {}) {
     };
     $('.care-exercise').hidden = true;
     $('.care-result').hidden = false;
-    $('.care-duration').textContent = `已练习 ${durationText(durationSeconds)}。${durationSeconds >= targetSeconds ? '这一小段时间，属于你。' : '愿意停在这里，也很好。'}`;
+    $('.care-duration').textContent = `已练习 ${durationText(durationSeconds)}。${durationSeconds >= targetSeconds ? '练习结束。' : '已提前结束。'}`;
     showError();
     $('.care-result-heading').focus();
   }
