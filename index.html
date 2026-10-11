@@ -1,0 +1,98 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#f5f4ee">
+  <meta name="description" content="情绪日记与自我关怀：给情绪一点空间，也给自己一点温柔。">
+  <title>情绪日记与自我关怀</title>
+  <style>
+    :root { color-scheme: light; --ink: #283e36; --muted: #65746c; --line: #dce2d8; }
+    * { box-sizing: border-box; }
+    body { margin: 0; background: #f5f4ee; color: var(--ink); font-family: "PingFang SC", "Microsoft YaHei", system-ui, sans-serif; -webkit-font-smoothing: antialiased; }
+    .shell { width: min(1120px, calc(100% - 64px)); margin: auto; }
+    header { min-height: 100px; display: flex; align-items: center; justify-content: space-between; gap: 20px; border-bottom: 1px solid var(--line); }
+    .brand { display: flex; align-items: center; gap: 12px; font-size: 18px; font-weight: 600; letter-spacing: 1px; }
+    .brand svg { width: 32px; height: 32px; }
+    .edition { font-size: 12px; letter-spacing: 2px; color: var(--muted); }
+    main { padding: 84px 0 58px; }
+    .hero { display: grid; grid-template-columns: 1.25fr 1fr; align-items: center; gap: 46px; }
+    .eyebrow { margin: 0 0 22px; display: flex; align-items: center; gap: 9px; color: #58755e; font-size: 13px; letter-spacing: 2px; }
+    .dot { width: 6px; height: 6px; border-radius: 50%; background: #759b74; }
+    h1 { margin: 0; font-size: clamp(32px, 4vw, 52px); line-height: 1.55; font-weight: 500; letter-spacing: -1px; }
+    .intro { margin: 25px 0 30px; color: var(--muted); line-height: 1.95; font-size: 16px; }
+    .status { display: inline-flex; align-items: center; gap: 9px; padding: 11px 16px; border-radius: 24px; background: #e8eddf; font-size: 12px; color: #4e654e; }
+    .art { position: relative; height: 340px; display: grid; place-items: center; }
+    .halo { position: absolute; width: 290px; height: 290px; border: 1px solid #d8dfcf; border-radius: 50%; }
+    .halo:before { content: ""; position: absolute; inset: 22px; border: 1px solid #e1e4d8; border-radius: 50%; }
+    .orb { position: relative; width: 208px; height: 222px; border-radius: 47% 53% 49% 51% / 57% 48% 52% 43%; background: radial-gradient(circle at 35% 25%, #faf6d9 0, #dce5c6 45%, #a8c2a3 100%); box-shadow: 0 24px 54px #869f7717, inset -12px -12px 25px #94b38b1a; transform: rotate(-8deg); }
+    .face { position: absolute; top: 45%; left: 32%; width: 72px; height: 30px; transform: rotate(8deg); }
+    .eyes { display: flex; justify-content: space-between; }
+    .eyes i { width: 14px; height: 8px; border-bottom: 2px solid #6b8566; border-radius: 50%; }
+    .smile { width: 16px; height: 10px; border-bottom: 2px solid #6b8566; border-radius: 50%; margin: 7px auto; }
+    .art-caption { position: absolute; bottom: 4px; color: #7b8975; font-size: 12px; letter-spacing: 4px; }
+    .roadmap { margin-top: 80px; border-top: 1px solid var(--line); padding-top: 24px; }
+    .roadmap-heading { display: flex; align-items: center; justify-content: space-between; gap: 16px; }
+    h2 { font-size: 14px; font-weight: 500; margin: 0; }
+    .planned { color: #778375; font-size: 12px; }
+    .steps { display: grid; grid-template-columns: repeat(3, 1fr); margin-top: 30px; gap: 38px; }
+    .step { border-left: 2px solid #d8dfce; padding-left: 17px; }
+    .number { color: #84917b; font-size: 11px; letter-spacing: 2px; }
+    h3 { margin: 11px 0 9px; font-size: 18px; font-weight: 500; }
+    .step p { margin: 0; color: var(--muted); font-size: 13px; line-height: 1.85; }
+    footer { display: flex; justify-content: space-between; gap: 20px; padding: 24px 0 30px; border-top: 1px solid var(--line); color: #7d887b; font-size: 11px; letter-spacing: 1px; }
+    @media (max-width: 700px) {
+      .shell { width: calc(100% - 40px); }
+      header { min-height: 78px; }
+      .brand { font-size: 16px; }
+      .edition { font-size: 10px; letter-spacing: 1px; }
+      main { padding-top: 46px; }
+      .hero { grid-template-columns: 1fr; gap: 22px; }
+      .intro { font-size: 14px; }
+      .art { height: 280px; }
+      .halo { width: 244px; height: 244px; }
+      .orb { width: 170px; height: 185px; }
+      .face { left: 31%; width: 62px; }
+      .roadmap { margin-top: 44px; }
+      .steps { grid-template-columns: 1fr; gap: 26px; }
+      .roadmap-heading { align-items: flex-start; }
+      footer { flex-direction: column; gap: 10px; }
+    }
+  </style>
+</head>
+<body>
+  <div class="shell">
+    <header>
+      <div class="brand">
+        <svg aria-hidden="true" viewBox="0 0 32 32" fill="none"><rect width="32" height="32" rx="11" fill="#dde6d3"/><path d="M10 18c1.5 5 10.5 5 12 0M11 12v2m10-2v2" stroke="#53714e" stroke-width="1.6" stroke-linecap="round"/></svg>
+        <span>情绪日记</span>
+      </div>
+      <span class="edition">A LITTLE SPACE FOR YOU</span>
+    </header>
+    <main>
+      <section class="hero" aria-labelledby="welcome">
+        <div>
+          <p class="eyebrow"><span class="dot"></span>情绪日记与自我关怀</p>
+          <h1 id="welcome">给情绪一点空间，<br>给自己一点温柔。</h1>
+          <p class="intro">无论今天是晴天，还是偶尔有雨，<br>你的每一种感受，都值得被好好安放。</p>
+          <span class="status"><span class="dot"></span>初始版本 · 正在慢慢完善</span>
+        </div>
+        <div class="art" role="img" aria-label="一颗闭眼微笑的浅绿色小星球">
+          <div class="halo"></div>
+          <div class="orb"><div class="face"><div class="eyes"><i></i><i></i></div><div class="smile"></div></div></div>
+          <span class="art-caption">慢慢来，也没关系</span>
+        </div>
+      </section>
+      <section class="roadmap" aria-labelledby="next">
+        <div class="roadmap-heading"><h2 id="next">一个照顾自己的小小开始</h2><span class="planned">以下功能即将完善</span></div>
+        <div class="steps">
+          <article class="step"><span class="number">01 / RECORD</span><h3>记录此刻的情绪</h3><p>留下一点心情、一段日常，听见自己的感受。</p></article>
+          <article class="step"><span class="number">02 / UNDERSTAND</span><h3>看见情绪的变化</h3><p>回望情绪的起伏，慢慢理解背后的触发因素。</p></article>
+          <article class="step"><span class="number">03 / CARE</span><h3>找到适合的关怀</h3><p>从冥想、音乐与运动中，找到今天的小小放松。</p></article>
+        </div>
+      </section>
+    </main>
+    <footer><span>情绪日记与自我关怀</span><span>留一点时间，好好照顾自己。</span></footer>
+  </div>
+</body>
+</html>
