@@ -34,13 +34,13 @@ export function localDay(dateOrString = new Date()) {
 export function demoEntries() {
   const examples = [
     [6, 9, 3, 3, ['平静'], ['工作'], '到公司才发现耳机忘带了。今天先把周报写完。'],
-    [6, 20, 4, 3, ['轻松', '满足'], ['户外', '运动'], '下楼买水果，绕公园多走了一圈，回来没那么烦了。'],
+    [6, 20, 4, 3, ['轻松', '满足'], ['户外', '运动'], '下楼买水果，绕公园多走了一圈，回来没那么烦了。', true],
     [5, 19, 2, 2, ['疲惫'], ['工作', '睡眠'], '方案又改了两轮，原本约好的晚饭没赶上。'],
     [4, 10, 3, 3, ['平静'], ['独处'], '早上没设闹钟，慢慢吃了碗面。'],
-    [4, 20, 4, 4, ['开心'], ['人际', '饮食'], '和大学室友吃饭，聊着聊着忘了看手机。'],
+    [4, 20, 4, 4, ['开心'], ['人际', '饮食'], '和大学室友吃饭，聊着聊着忘了看手机。', true],
     [3, 18, 5, 4, ['期待', '满足'], ['兴趣', '学习'], '做的小网页终于跑起来了，给朋友看了一眼，挺开心。'],
     [2, 9, 3, 2, ['疲惫'], ['睡眠'], '刷视频刷到两点，早上脑子有点钝。'],
-    [2, 19, 4, 3, ['轻松'], ['运动', '户外'], '只跑了两公里，但回来的路上觉得也够了。'],
+    [2, 19, 4, 3, ['轻松'], ['运动', '户外'], '只跑了两公里，但回来的路上觉得也够了。', true],
     [1, 10, 2, 2, ['烦躁'], ['工作'], '会上说了一半被打断，后来一直想着那句话。'],
     [1, 20, 3, 3, ['平静'], ['家庭', '独处'], '给家里打了个电话，边聊边把堆着的衣服叠了。'],
     [0, 9, 3, 3, ['平静'], ['饮食'], '今天按时吃了午饭。没什么特别的，但胃舒服一些。'],
@@ -49,12 +49,12 @@ export function demoEntries() {
   const now = new Date();
   const todayStart = new Date(now);
   todayStart.setHours(0, 0, 0, 0);
-  return examples.map(([ago, hour, mood, energy, emotions, tags, note], index) => {
+  return examples.map(([ago, hour, mood, energy, emotions, tags, note, kept = false], index) => {
     const date = new Date(now);
     date.setDate(date.getDate() - ago);
     date.setHours(hour, 10, 0, 0);
     if (ago === 0) date.setTime(todayStart.getTime() + (now - todayStart) * (hour === 9 ? 0.35 : 0.8));
-    return { id: `demo-${index + 1}`, createdAt: date.toISOString(), mood, energy, emotions: [...emotions], tags: [...tags], note, kind: 'entry' };
+    return { id: `demo-${index + 1}`, createdAt: date.toISOString(), mood, energy, emotions: [...emotions], tags: [...tags], note, kept, kind: 'entry' };
   });
 }
 
@@ -95,6 +95,7 @@ function timestamp(value, name) {
 
 function entry(value) {
   if (!isObject(value) || value.kind !== 'entry') invalid('心情记录格式不正确。');
+  if (value.kept !== undefined && typeof value.kept !== 'boolean') invalid('留存标记必须是布尔值。');
   return {
     id: string(value.id, '记录编号', 200),
     createdAt: timestamp(value.createdAt, '记录时间'),
@@ -103,6 +104,7 @@ function entry(value) {
     emotions: strings(value.emotions, '感受'),
     tags: strings(value.tags, '标签'),
     note: string(value.note, '文字记录', 10000, true),
+    kept: value.kept ?? false,
     kind: 'entry',
   };
 }

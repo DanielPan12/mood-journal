@@ -76,6 +76,7 @@ test('demo data is fresh, spans seven dates, and never writes or leaks into stat
   assert.equal(new Set(demos.map(item => localDay(item.createdAt))).size, 7);
   assert.ok(demos.every(item => new Date(item.createdAt) <= new Date()));
   assert.equal(parseBackup(backup(demos)).entries.length, 12);
+  assert.deepEqual(demos.filter(item => item.kept).map(item => item.id), ['demo-2', 'demo-5', 'demo-8']);
   demos[0].tags.push('外部修改');
   demos[0].note = '外部修改';
   assert.ok(!demoEntries()[0].tags.includes('外部修改'));
@@ -111,12 +112,27 @@ test('malformed, oversized, future and invalid records are rejected', () => {
     { createdAt: '2025-02-30T12:00:00.000Z' }, { createdAt: 'yesterday' },
     { tags: Array(21).fill('工作') }, { emotions: [4] }, { emotions: ['x'.repeat(81)] },
     { note: 'x'.repeat(10001) }, { note: {} }, { id: '' }, { kind: 'session' },
+    { kept: 'true' }, { kept: 1 }, { kept: null },
   ]) assert.throws(() => parseBackup(backup([entry(change)])), JSON.stringify(change).slice(0, 120));
   assert.throws(() => parseBackup(backup([entry(), entry()])));
   assert.throws(() => parseBackup(backup(Array(10001).fill(entry()))));
   for (const change of [{ durationSeconds: -1 }, { minutes: 1441 }, { feedback: null }, { at: 'bad' }, { title: '' }]) {
     assert.throws(() => parseBackup(backup([], [session(change)])));
   }
+});
+
+test('kept moments survive backups and storage while legacy entries default to unkept', () => {
+  const entries = [entry({ id: 'legacy' }), entry({ id: 'kept', kept: true }), entry({ id: 'ordinary', kept: false })];
+  const parsed = parseBackup(backup(entries));
+  assert.deepEqual(parsed.entries.map(item => item.kept), [false, true, false]);
+  assert.deepEqual(parseBackup(makeBackup(parsed)), parsed);
+  storage(JSON.stringify({ version: 1, entries, sessions: [], mode: 'personal' }));
+  assert.deepEqual(readState().entries, parsed.entries);
+  writeState({ ...parsed, mode: 'personal' });
+  assert.deepEqual(readState().entries, parsed.entries);
+  const updated = parsed.entries.map(item => ({ ...item, kept: false }));
+  writeState({ entries: updated, sessions: [], mode: 'personal' });
+  assert.ok(readState().entries.every(item => item.kept === false));
 });
 
 test('corrupt saved data is reported and remains untouched even after a save attempt', () => {
